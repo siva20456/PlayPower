@@ -1,20 +1,23 @@
-# Use the official Node.js 14 image as a parent image
+# Use an official Node.js runtime as the base image
 FROM node:14
 
-# Set the working directory inside the container
-WORKDIR /app
+# Set the working directory
+WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json (or npm-shrinkwrap.json) files
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies inside the container
+# Install app dependencies
 RUN npm install
 
-# Copy the rest of your application's source code from your host to your image filesystem.
+# Copy the rest of the application code
 COPY . .
 
-# Make port 3000 available to the world outside this container
+# Copy the SQLite database file
+COPY models/mydatabase.db ./models/mydatabase.db
+
+# Expose the port the app runs on
 EXPOSE 3006
 
-# Define the command to run your app using CMD which defines your runtime
+# Define the command to run the app
 CMD ["node", "src/app.js"]
